@@ -1,5 +1,28 @@
 from gym.envs.registration import registry, register, make, spec
 
+# Custom
+# ----------------------------------------
+register(
+    id='MountainCarCts-v0',
+    entry_point='gym.envs.custom:MountainCarCtsEnv',
+    timestep_limit=200,
+    reward_threshold=-110.0,
+)
+
+register(
+    id='CartPoleCts-v0',
+    entry_point='gym.envs.custom:CartPoleCtsEnv',
+    timestep_limit=200,
+    reward_threshold=-110.0,
+)
+
+register(
+    id='MazeEnv-v0',
+    entry_point='gym.envs.custom:MazeEnv',
+    timestep_limit=200,
+    reward_threshold=-110.0,
+)
+
 # Algorithmic
 # ----------------------------------------
 
