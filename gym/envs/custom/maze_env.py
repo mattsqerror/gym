@@ -9,7 +9,7 @@ import gym
 from gym import spaces
 from gym.utils import seeding
 import numpy as np
-from gym.envs.classic_control import rendering
+#from gym.envs.classic_control import rendering
 
 class MazeEnv(gym.Env):
     metadata = {
@@ -157,7 +157,7 @@ class MazeEnv(gym.Env):
         ex_size=0.05
 
         if self.viewer is None:
-#            from gym.envs.classic_control import rendering
+            from gym.envs.classic_control import rendering
 
             self.viewer = rendering.Viewer(screen_width, screen_height)
             
