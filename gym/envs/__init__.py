@@ -23,6 +23,34 @@ register(
     reward_threshold=-110.0,
 )
 
+register(
+    id='ResetMazeEnv-v0',
+    entry_point='gym.envs.custom:ResetMazeEnv',
+    timestep_limit=200,
+    reward_threshold=-110.0,
+)
+
+register(
+    id='RandomMazeEnv-v0',
+    entry_point='gym.envs.custom:RandomMazeEnv',
+    timestep_limit=200,
+    reward_threshold=-110.0,
+)
+
+register(
+    id='OpenMazeEnv-v0',
+    entry_point='gym.envs.custom:OpenMazeEnv',
+    timestep_limit=200,
+    reward_threshold=-110.0,
+)
+
+#register(
+#    id='CoilEnv-v0',
+#    entry_point='gym.envs.custom:CoilEnv',
+#    timestep_limit=200,
+#    reward_threshold=-110.0,
+#)
+
 # Algorithmic
 # ----------------------------------------
 

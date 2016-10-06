@@ -11,7 +11,7 @@ from gym.utils import seeding
 import numpy as np
 #from gym.envs.classic_control import rendering
 
-class MazeEnv(gym.Env):
+class RandomMazeEnv(gym.Env):
     metadata = {
         'render.modes': ['human', 'rgb_array'],
         'video.frames_per_second': 30
@@ -19,8 +19,15 @@ class MazeEnv(gym.Env):
 
     def __init__(self, walls=None):
         
+        ww = 2  # wall width
+        wl = 8  # wall length
+        wsx1 = 2
+        wsy1 = 10
+        
+        self.walls = [[[]]]
+        
         if walls is None:
-            self.walls = [[[2.,10.],[2.,2.],[4.,2.],[4.,10.]],[[6.,0.],[6.,8.],[8.,8.],[8.,0.]]]
+            self.walls = [[[2,10],[2,2],[4,2],[4,10]],[[6,0],[6,8],[8,8],[8,0]]]
         else:
             self.walls = walls
         
@@ -32,8 +39,7 @@ class MazeEnv(gym.Env):
         
         self.init_state = np.array([.1,9.9])        
         
-        #self.step_size = 0.1
-        self.step_size = 0.5
+        self.step_size = 0.1        
         
         self.min_x = 0.
         self.max_x = 10.
@@ -119,8 +125,10 @@ class MazeEnv(gym.Env):
            (next_state[0] > self.max_x) or \
            (next_state[1] > self.max_y):
             self.intersect_flag = True
+            self._reset()
         elif self._intersect(np.concatenate([self.state,next_state]),self.wall_mat).any():
-            self.intersect_flag = True       
+            self.intersect_flag = True
+            self._reset() 
         else:
             self.state = next_state
             self.intersect_flag = False

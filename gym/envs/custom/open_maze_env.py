@@ -11,7 +11,7 @@ from gym.utils import seeding
 import numpy as np
 #from gym.envs.classic_control import rendering
 
-class MazeEnv(gym.Env):
+class OpenMazeEnv(gym.Env):
     metadata = {
         'render.modes': ['human', 'rgb_array'],
         'video.frames_per_second': 30
@@ -19,16 +19,6 @@ class MazeEnv(gym.Env):
 
     def __init__(self, walls=None):
         
-        if walls is None:
-            self.walls = [[[2.,10.],[2.,2.],[4.,2.],[4.,10.]],[[6.,0.],[6.,8.],[8.,8.],[8.,0.]]]
-        else:
-            self.walls = walls
-        
-        wall_mat = []
-        for wall in self.walls:
-            for jj in xrange(len(wall)-1):
-                wall_mat.append(wall[jj]+wall[jj+1])
-        self.wall_mat = np.array(wall_mat)
         
         self.init_state = np.array([.1,9.9])        
         
@@ -109,25 +99,28 @@ class MazeEnv(gym.Env):
         r = np.random.randn(1) * (np.pi / 3 ) / 2
         
         action_vec = np.array([math.cos(action), math.sin(action)])
-        
+                
         next_mat = np.array([[math.cos(r), -math.sin(r)],[math.sin(r), math.cos(r)]])
         
-        next_state = np.dot(next_mat, action_vec) * self.step_size + self.state
+        if self.state[0] > 5 and self.state[0] < 7 and self.state[1] > 5 and self.state[1] < 7:        
+            next_state = -np.dot(next_mat, action_vec) * self.step_size + self.state
+            #print self.state
+        else:
+            next_state = np.dot(next_mat, action_vec) * self.step_size + self.state
         
         if (next_state[0] < self.min_x) or \
            (next_state[1] < self.min_y) or \
            (next_state[0] > self.max_x) or \
            (next_state[1] > self.max_y):
             self.intersect_flag = True
-        elif self._intersect(np.concatenate([self.state,next_state]),self.wall_mat).any():
-            self.intersect_flag = True       
         else:
             self.state = next_state
             self.intersect_flag = False
         
         
         
-        done = bool(np.linalg.norm(self.state - self.goal_state) < 0.5)
+        #done = bool(np.linalg.norm(self.state - self.goal_state) < 0.5)
+        done = False
         reward = -1.0
 
         return np.array(self.state), reward, done, {}
@@ -176,12 +169,6 @@ class MazeEnv(gym.Env):
             boundary = rendering.make_polygon([(l,b), (l,t), (r,t), (r,b)], False)
             self.viewer.add_geom(boundary)
             
-            ## walls
-            for wall in self.walls:
-                for ii in xrange(len(wall)-1):
-                    wall_line = rendering.Line((wall[ii][0]*scale_x,wall[ii][1]*scale_y), \
-                                               (wall[ii+1][0]*scale_x,wall[ii+1][1]*scale_y))
-                    self.viewer.add_geom(wall_line)
         
         x = self.state[0]
         y = self.state[1]        
