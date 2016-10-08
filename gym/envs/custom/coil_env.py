@@ -67,9 +67,15 @@ class CoilEnv(gym.Env):
 
         return np.array(self.state), reward, done, {'object_ind': self.object_ind, 'angle_ind': self.angle_ind}
 
-    def _reset(self):
-        self.angle_ind = np.random.choice(68) # 72 angles per object minus 4 "training angles"
-        self.object_ind = np.random.choice(100) # 100 objects
+    def _reset(self, obj=None, ang=None):
+        if ang is None:
+            self.angle_ind = np.random.choice(68) # 72 angles per object minus 4 "training angles"
+        else:
+            self.angle_ind = ang
+        if obj is None:
+            self.object_ind = np.random.choice(100) # 100 objects
+        else:
+            self.object_ind = obj
         self.state = self.images_enc[self.object_ind,self.angle_ind]      
  
         return self.state
